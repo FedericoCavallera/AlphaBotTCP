@@ -15,4 +15,3 @@ while True:
     print(msg2)
 s.close()
 
-#palle
