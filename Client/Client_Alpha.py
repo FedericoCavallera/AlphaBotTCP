@@ -11,7 +11,6 @@ while True:
     print(msg.decode())
     if msg == b"e":
         break
-    msg2 = s.recv(4096).decode()
-    print(msg2)
+    # msg2 = s.recv(409 6).decode()
+    # print(msg2)
 s.close()
-
