@@ -7,7 +7,7 @@ import sqlite3
 #Address di connesione al robot
 ADDRES = ("192.168.1.110", 3000) 
 
-
+#Connessione al database
 conn = sqlite3.connect('./db/db_controllo_alfabot.db')
 cur = conn.cursor()
 
@@ -58,14 +58,16 @@ dataCatch.start()
 #dizionario di controllo del robot
 #in base al carattere ricevuto viene chiamata la rispettiva funzione
 movemnts = {
-    "w": Ab.forward,
-    "s": Ab.backward,
-    "a": Ab.left,
-    "d": Ab.right,
-    "e": Ab.ex,
-    " ": Ab.stop,
-    "x": ctrl.modularFw,
-    "c": ctrl.modularBw
+    "Ab.forward()": Ab.forward,
+    "Ab.backward()": Ab.backward,
+    "Ab.left()": Ab.left,
+    "Ab.right()": Ab.right,
+    "Ab.ex()": Ab.ex,
+    "Ab.stop()": Ab.stop,
+    "ctrl.modularFw()": ctrl.modularFw,
+    "ctrl.modularBw()": ctrl.modularBw,
+    "Ab.square()": Ab.square,
+    "Ab.circle()": Ab.circle
 }
 
 #dizionario di controllo per le velocità
@@ -95,8 +97,9 @@ def server_connect():
         if data == "e":
             break
         ctrl.setSpeed(data)
-        cur.execute(f'SELECT function FROM controlli\nWHERE control_char = "{input("inserisci: ")}"')
-        print(cur.fetchall()[0][0])
+        cur.execute(f"SELECT function FROM controlli WHERE control_char = '{data}'")
+        command = cur.fetchall()[0][0]
+        movemnts[command]()
             
         
     conn.close()

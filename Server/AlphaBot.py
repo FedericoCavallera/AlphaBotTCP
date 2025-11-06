@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import time
 
 #Classe modificata sui metodi forward, backward, left, right
 #Aggiunto il reset del dutycycle
@@ -73,7 +74,29 @@ class AlphaBot(object):
 		GPIO.output(self.IN2,GPIO.LOW)
 		GPIO.output(self.IN3,GPIO.LOW)
 		GPIO.output(self.IN4,GPIO.LOW)
+  
+	def square(self):
+		for i in range(4):
+			self.forward()
+			time.sleep(1.2)
+			self.stop()
+
+			self.right()
+			time.sleep(0.33)
+			self.stop()
+
 		
+
+	def circle(self):
+		for i in range(14):
+			self.forward()
+			time.sleep(0.1)
+			self.stop()
+   
+			self.right()
+			time.sleep(0.1)
+			self.stop()
+
 	def setPWMA(self,value):
 		self.PWMA.ChangeDutyCycle(value)
 
