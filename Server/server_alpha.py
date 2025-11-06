@@ -2,9 +2,14 @@ import socket as sk
 import AlphaBot
 import threading
 import time
+import sqlite3
 
 #Address di connesione al robot
 ADDRES = ("192.168.1.110", 3000) 
+
+
+conn = sqlite3.connect('./db/db_controllo_alfabot.db')
+cur = conn.cursor()
 
 class DataCatcher(threading.Thread):
     def __init__(self, robot):
@@ -75,9 +80,11 @@ def server_connect():
     server = sk.socket(sk.AF_INET, sk.SOCK_STREAM)
     server.bind(ADDRES)
     server.listen(1)
+
     conn, addr = server.accept()
     data = ""
     print("Connection from: ", addr)
+
     while True:
         data = conn.recv(1024).decode()
         print("Received from client: ", data)
@@ -88,8 +95,8 @@ def server_connect():
         if data == "e":
             break
         ctrl.setSpeed(data)
-        if (data in movemnts):
-            movemnts[data]()
+        cur.execute(f'SELECT function FROM controlli\nWHERE control_char = "{input("inserisci: ")}"')
+        print(cur.fetchall()[0][0])
             
         
     conn.close()
